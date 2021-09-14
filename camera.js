@@ -13,7 +13,8 @@ export default function App({navigation}) {
 
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [calories, setCalories] = useState(0);
+  const [calories, setCalories] = useState(null);
+  const [foodItem, setFoodItem] = useState(null);
   // console.log(data);
 
   // useEffect(() => {
@@ -45,7 +46,9 @@ export default function App({navigation}) {
         setData(json);
         // console.log(json['foods'][0]['foodNutrients'][3]["value"]);
         setCalories(json['foods'][0]['foodNutrients'][3]["value"]);
+        setFoodItem(json['foods'][0]['lowercaseDescription']);
         console.log(calories)
+        console.log(foodItem)
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
@@ -80,7 +83,8 @@ export default function App({navigation}) {
           title="Go to IngredientScreen"
           onPress={() => {
             navigation.navigate('IngredientScreen',{
-              calories: calories
+              calories: calories,
+              foodItem: foodItem,
           });
         }}
         />

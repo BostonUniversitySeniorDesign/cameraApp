@@ -8,11 +8,11 @@ import { StyleSheet, Text, View } from 'react-native';
 
 export default function App({route}) {
 
-  const {calories} = route.params;
+  const {calories, foodItem} = route.params;
 
   return (
     <View style={styles.container}>
-      <Text>The # of calories is {calories} </Text>
+      <Text>The # of calories in {foodItem} is {calories} </Text>
       <StatusBar style="auto" />
     </View>
   );
