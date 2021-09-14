@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-export default function App() {
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import IngredientScreen from "./IngredientScreen";
+
+export default function App({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [calories, setCalories] = useState(0);
   // console.log(data);
 
   // useEffect(() => {
@@ -37,7 +43,9 @@ export default function App() {
       .then((response) => response.json())
       .then((json) => {
         setData(json);
-        console.log(json['foods'][0]['foodNutrients'][3]["value"]);
+        // console.log(json['foods'][0]['foodNutrients'][3]["value"]);
+        setCalories(json['foods'][0]['foodNutrients'][3]["value"]);
+        console.log(calories)
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
@@ -66,6 +74,17 @@ export default function App() {
         style={StyleSheet.absoluteFillObject}
       />
       {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+
+      <View style = {IngredientScreenButtonStyles.container}>
+        <Button
+          title="Go to IngredientScreen"
+          onPress={() => {
+            navigation.navigate('IngredientScreen',{
+              calories: calories
+          });
+        }}
+        />
+      </View>
     </View>
   );
 }
@@ -75,5 +94,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
+  },
+});
+
+const IngredientScreenButtonStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
   },
 });

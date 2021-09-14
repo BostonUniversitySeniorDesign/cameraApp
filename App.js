@@ -45,6 +45,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import CameraScreen from "./camera";
+import IngredientScreen from "./IngredientScreen";
 
 function HomeScreen({navigation}) { //passing the navigation prop
   return (
@@ -54,7 +55,7 @@ function HomeScreen({navigation}) { //passing the navigation prop
         title="Go to Camera"
         onPress={() => navigation.navigate('Camera')}
       />
-      
+
     </View>
   );
 }
@@ -67,6 +68,7 @@ function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Camera" component={CameraScreen} />
+        <Stack.Screen name="IngredientScreen" component={IngredientScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
