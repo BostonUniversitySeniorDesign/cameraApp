@@ -44,8 +44,33 @@ import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import firebase from 'firebase';
+import * as Google from 'expo-google-app-auth';
+
+import {firebaseConfig} from './config';
+firebase.initializeApp(firebaseConfig);
+
 import CameraScreen from "./camera";
 import IngredientScreen from "./IngredientScreen";
+
+signInWithGoogleAsync = async () => {
+  try {
+    const result = await Google.logInAsync({
+      //androidClientId: YOUR_CLIENT_ID_HERE,
+      behavior:'web',
+      iosClientId: '203152648176-5e7i9r1j4n952eni9o6eeseoena65av8.apps.googleusercontent.com',
+      scopes: ['profile', 'email'],
+    });
+
+    if (result.type === 'success') {
+      return result.accessToken;
+    } else {
+      return { cancelled: true };
+    }
+  } catch (e) {
+    return { error: true };
+  }
+}
 
 function HomeScreen({navigation}) { //passing the navigation prop
   return (
@@ -54,6 +79,10 @@ function HomeScreen({navigation}) { //passing the navigation prop
       <Button
         title="Go to Camera"
         onPress={() => navigation.navigate('Camera')}
+      />
+      <Button
+        title="Sign In With Google"
+        onPress={() => this.signInWithGoogleAsync()} 
       />
 
     </View>

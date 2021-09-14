@@ -17,7 +17,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bostonuniversity.camApp",
+      "config":{
+        "googleSignIn": {
+          "reservedClientId": "203152648176-d48opqro9g3jvec9ki21e6171q4cc6k7.apps.googleusercontent.com"
+        }
+      },
+      "googleServicesFile": "GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
