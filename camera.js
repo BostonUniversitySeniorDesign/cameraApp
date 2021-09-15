@@ -7,15 +7,67 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import IngredientScreen from "./IngredientScreen";
 
+
+// import {initializeApp} from "@firebase/app"
+import firebase from 'firebase';
+
+import { getDatabase, ref, set } from "firebase/database";
+import "firebase/database"
+
+// function writeUserData(userId, name, email, imageUrl) {
+//   const db = getDatabase();
+//   set(ref(db, 'users/' + userId), {
+//     username: name,
+//     email: email,
+//     profile_picture : imageUrl
+//   });
+// }
+
+// function writeData(recipeNumber,foodItem,calories) {
+//   const db = getDatabase();
+//   set(ref(db, 'recipes/' + recipeNumber), {
+//     food: foodItem,
+//     calorieValue: calories,
+//   });
+// }
+
+// function storeIngredient(userId, score) {
+//   firebase
+//     .database()
+//     .ref('users/' + userId)
+//     .set({
+//       ingreident: score,
+//     });
+// }
+
+
 export default function App({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [calories, setCalories] = useState(null);
-  const [foodItem, setFoodItem] = useState(null);
+  const [caloriesRoute, setCaloriesRoute] = useState(null);
+  const [foodItemRoute, setFoodItemRoute] = useState(null);
+  const [numberOfRecipe, setNumberOfRecipe] = useState(null);
   // console.log(data);
+
+  function storeIngredient(recipeNumber,foodItem, calories) {
+    firebase
+      .database()
+      .ref('recipes/' + recipeNumber)
+      .push({
+        food: foodItem,
+        calorieValue: calories,
+      });
+      // firebase
+      //   .database()
+      //   .ref('recipes/' + recipeNumber)
+      //   .update({
+      //   });
+
+      console.log(calories);
+  }
 
   // useEffect(() => {
   //   fetch('https://api.nal.usda.gov/fdc/v1/foods/search?api_key=Zv3iWDaJzMh05as8UPFgPiy10NWyAMkNiDR80hg7&query=028400097659')
@@ -39,16 +91,24 @@ export default function App({navigation}) {
     if (data.length === 13){
       data = data.slice(1);
     }
+    console.log(data);
     // useFetchFromAPI();
     fetch('https://api.nal.usda.gov/fdc/v1/foods/search?api_key=Zv3iWDaJzMh05as8UPFgPiy10NWyAMkNiDR80hg7&query='+ data)
       .then((response) => response.json())
       .then((json) => {
         setData(json);
-        // console.log(json['foods'][0]['foodNutrients'][3]["value"]);
-        setCalories(json['foods'][0]['foodNutrients'][3]["value"]);
-        setFoodItem(json['foods'][0]['lowercaseDescription']);
-        console.log(calories)
-        console.log(foodItem)
+        //console.log(json['foods'][0]['foodNutrients'][3]["value"]);
+        const calories = json['foods'][0]['foodNutrients'][3]["value"];
+        const foodItem = json['foods'][0]['lowercaseDescription'];
+        setCaloriesRoute(json['foods'][0]['foodNutrients'][3]["value"]);
+        setFoodItemRoute(json['foods'][0]['lowercaseDescription']);
+        console.log('directly after' + calories)
+        // console.log(foodItem)
+
+        //trying to store in database
+        const new_num = numberOfRecipe.toString() + "recipe"; //1recipe .. 2recipe.. etc
+        storeIngredient(new_num,foodItem,calories);
+
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
@@ -70,6 +130,7 @@ export default function App({navigation}) {
     return <Text>No access to camera</Text>;
   }
 
+
   return (
     <View style={styles.container}>
       <BarCodeScanner
@@ -79,12 +140,18 @@ export default function App({navigation}) {
       {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
 
       <View style = {IngredientScreenButtonStyles.container}>
+      <Button
+        title="Start new recipe"
+        onPress={() => {
+          setNumberOfRecipe(numberOfRecipe + 1);
+      }}
+      />
         <Button
           title="Go to IngredientScreen"
           onPress={() => {
             navigation.navigate('IngredientScreen',{
-              calories: calories,
-              foodItem: foodItem,
+              caloriesRoute: caloriesRoute,
+              foodItemRoute: foodItemRoute,
           });
         }}
         />

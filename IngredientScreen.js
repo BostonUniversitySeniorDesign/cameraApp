@@ -3,16 +3,30 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 // import CameraScreen from "./camera";
+import firebase from 'firebase';
 
+import { getDatabase, ref, set } from "firebase/database";
+import "firebase/database"
+
+// function getIngredient(recipeNumber,foodItem, calories) {
+//   firebase
+//     .database()
+//     .ref('recipes/firstRecipe/calorieValue')
+//     .on('value',(snap)=>{
+//       console.log(snap.val());
+//     });
+// }
 
 
 export default function App({route}) {
 
-  const {calories, foodItem} = route.params;
+  const {caloriesRoute, foodItemRoute} = route.params;
+
+  // getIngredient('hello', foodItem, calories);
 
   return (
     <View style={styles.container}>
-      <Text>The # of calories in {foodItem} is {calories} </Text>
+      <Text>The # of calories in {foodItemRoute}, the last ingredient scanned... is {caloriesRoute} </Text>
       <StatusBar style="auto" />
     </View>
   );

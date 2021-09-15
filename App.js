@@ -82,7 +82,7 @@ function HomeScreen({navigation}) { //passing the navigation prop
       />
       <Button
         title="Sign In With Google"
-        onPress={() => this.signInWithGoogleAsync()} 
+        onPress={() => this.signInWithGoogleAsync()}
       />
 
     </View>
@@ -104,3 +104,7 @@ function App() {
 }
 
 export default App;
+
+// let preferences = {
+//   numberOfRecipe : 1
+// }
