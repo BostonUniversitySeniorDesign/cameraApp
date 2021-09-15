@@ -53,24 +53,9 @@ firebase.initializeApp(firebaseConfig);
 import CameraScreen from "./camera";
 import IngredientScreen from "./IngredientScreen";
 
-signInWithGoogleAsync = async () => {
-  try {
-    const result = await Google.logInAsync({
-      //androidClientId: YOUR_CLIENT_ID_HERE,
-      behavior:'web',
-      iosClientId: '203152648176-5e7i9r1j4n952eni9o6eeseoena65av8.apps.googleusercontent.com',
-      scopes: ['profile', 'email'],
-    });
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
-    if (result.type === 'success') {
-      return result.accessToken;
-    } else {
-      return { cancelled: true };
-    }
-  } catch (e) {
-    return { error: true };
-  }
-}
+
 
 function HomeScreen({navigation}) { //passing the navigation prop
   return (
@@ -79,7 +64,36 @@ function HomeScreen({navigation}) { //passing the navigation prop
       <Button
         title="Go to Camera"
         onPress={() => navigation.navigate('Camera')}
-      />
+      /> 
+
+    </View>
+  );
+}
+
+function LoginScreen({navigation}) { //passing the navigation prop
+  signInWithGoogleAsync = async () => {
+    try {
+      const result = await Google.logInAsync({
+        //androidClientId: YOUR_CLIENT_ID_HERE,
+        behavior:'web',
+        iosClientId: '203152648176-5e7i9r1j4n952eni9o6eeseoena65av8.apps.googleusercontent.com',
+        scopes: ['profile', 'email'],
+      });
+  
+      if (result.type === 'success') {
+        // navigation.navigate("Home", { user });
+        navigation.navigate("Home");
+        return result.accessToken;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
+  }
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Login Screen</Text>
       <Button
         title="Sign In With Google"
         onPress={() => this.signInWithGoogleAsync()} 
@@ -94,7 +108,8 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="LoginScreen">
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Camera" component={CameraScreen} />
         <Stack.Screen name="IngredientScreen" component={IngredientScreen} />
