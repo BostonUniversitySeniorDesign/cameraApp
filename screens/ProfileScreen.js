@@ -5,8 +5,10 @@ const ProfileScreen = ({ route, navigation }) => {
   const { user } = route.params;
   console.log("user from google", user);
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Welcome {user.name} !</Text>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={{ fontSize : 20 }}>
+          Welcome {user.name} !
+      </Text>
       <Button
         title="Go to HomeScreen"
         onPress={() => navigation.navigate('Home')}

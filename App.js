@@ -44,10 +44,26 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import firebase from 'firebase';
-import {firebaseConfig} from './config';
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+import * as firebase from "firebase";
+import "firebase/firestore";
+import apiKeys from './config/keys';
+
+export async function registration(email, password, lastName, firstName) {
+  try {
+    await firebase.auth().createUserWithEmailAndPassword(email, password);
+    const currentUser = firebase.auth().currentUser;
+
+    const db = firebase.firestore();
+    db.collection("users")
+      .doc(currentUser.uid)
+      .set({
+        email: currentUser.email,
+        lastName: lastName,
+        firstName: firstName,
+      });
+  } catch (err) {
+    Alert.alert("There is something wrong!", err.message);
+  }
 }
 
 //screens
@@ -59,7 +75,12 @@ import HomeScreen from "./screens/HomeScreen";
 
 const Stack = createNativeStackNavigator();
 
-function App() {
+export default function App() {
+  if (!firebase.apps.length) {
+    console.log('Connected with Firebase')
+    firebase.initializeApp(apiKeys.firebaseConfig);
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
@@ -72,8 +93,6 @@ function App() {
     </NavigationContainer>
   );
 }
-
-export default App;
 
 // let preferences = {
 //   numberOfRecipe : 1

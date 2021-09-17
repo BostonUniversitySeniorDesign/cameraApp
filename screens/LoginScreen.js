@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Login with Google" onPress={signInAsync} />
+      <Button title="Sign in with Google" onPress={signInAsync} />
     </View>
   );
 };

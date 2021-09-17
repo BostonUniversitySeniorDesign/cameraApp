@@ -4,7 +4,8 @@ import { StyleSheet, Text, View, Button } from "react-native";
 const HomeScreen = ({ route, navigation }) => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
+        <Text style = {{ fontSize : 20 }}>
+            Home Screen</Text>
         <Button
       title="Go to Camera"
       onPress={() => navigation.navigate('Camera')}

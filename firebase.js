@@ -20,8 +20,6 @@ const fire = firebase.initializeApp ({
 });
 
 // Initialize Firebase
-
-
 export const auth = fire.auth();
 export const db = fire.firestore();
 export default {
